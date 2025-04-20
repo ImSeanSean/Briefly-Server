@@ -62,18 +62,21 @@ listRoute.put('/update', async ({ body }: { body: { id: number, name: string } }
     try {
         const { id, name } = body;
 
-        const updated = await db.update(lists)
+        // Check if the list exists before attempting to update
+        const list = await db.select().from(lists).where(eq(lists.id, id)).limit(1);
+
+        if (list.length === 0) {
+            return { success: false, message: "List not found" };
+        }
+
+        // Proceed with the update if list exists
+        await db.update(lists)
             .set({ name })
             .where(eq(lists.id, id));
 
-        if (updated.changes === 0) {
-            return { success: false, message: "List not found or not updated" };
-        }
-
         return {
             success: true,
-            message: "List updated successfully",
-            updated
+            message: "List updated successfully"
         };
     } catch (err) {
         console.error("Update Error:", err);
@@ -81,27 +84,31 @@ listRoute.put('/update', async ({ body }: { body: { id: number, name: string } }
     }
 });
 
+
 // DELETE
 listRoute.delete('/delete', async ({ body }: { body: { id: number } }) => {
     try {
         const { id } = body;
 
-        const deleted = await db.delete(lists)
-            .where(eq(lists.id, id));
+        // Check if the list exists before attempting to delete
+        const list = await db.select().from(lists).where(eq(lists.id, id)).limit(1);
 
-        if (deleted.changes === 0) {
-            return { success: false, message: "List not found or not deleted" };
+        if (list.length === 0) {
+            return { success: false, message: "List not found" };
         }
+
+        // Proceed with the deletion if list exists
+        await db.delete(lists).where(eq(lists.id, id));
 
         return {
             success: true,
-            message: "List deleted successfully",
-            deleted
+            message: "List deleted successfully"
         };
     } catch (err) {
         console.error("Delete Error:", err);
         return { success: false, message: "Something went wrong while deleting the list." };
     }
 });
+
 
 export default listRoute;

@@ -47,32 +47,45 @@ transactionRoute.put('/update', async ({ body }: { body: {
   try {
     const { id, ...updateData } = body;
 
-    const updated = await db.update(transactions)
+    // Check if the transaction exists before updating
+    const transaction = await db.select().from(transactions).where(eq(transactions.id, id)).limit(1);
+
+    if (transaction.length === 0) {
+      return { success: false, message: "Transaction not found" };
+    }
+
+    // Proceed with the update
+    await db.update(transactions)
       .set(updateData)
       .where(eq(transactions.id, id));
 
-    if (updated.changes === 0)
-      return { success: false, message: "Transaction not found or not updated" };
-
-    return { success: true, message: "Transaction updated", updated };
+    return { success: true, message: "Transaction updated" };
   } catch (err) {
     console.error("Update Error:", err);
     return { success: false, message: "Failed to update transaction" };
   }
 });
 
+
 // DELETE
 transactionRoute.delete('/delete', async ({ body }: { body: { id: number } }) => {
   try {
-    const deleted = await db.delete(transactions)
-      .where(eq(transactions.id, body.id));
+    const { id } = body;
 
-    if (deleted.changes === 0)
-      return { success: false, message: "Transaction not found or not deleted" };
+    // Check if the transaction exists before deleting
+    const transaction = await db.select().from(transactions).where(eq(transactions.id, id)).limit(1);
 
-    return { success: true, message: "Transaction deleted", deleted };
+    if (transaction.length === 0) {
+      return { success: false, message: "Transaction not found" };
+    }
+
+    // Proceed with the deletion
+    await db.delete(transactions).where(eq(transactions.id, id));
+
+    return { success: true, message: "Transaction deleted" };
   } catch (err) {
     console.error("Delete Error:", err);
     return { success: false, message: "Failed to delete transaction" };
   }
 });
+

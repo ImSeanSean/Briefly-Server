@@ -10,6 +10,9 @@ const app = new Elysia()
   .get('/', () => 'Welcome to Briefly-Server!')
   .use(accountRoute)
   .use(listRoute)
-  .use(transactionRoute)
+  .use(transactionRoute);
 
-console.log(`🚀 Running on http://localhost:${port}`);
+// Start the server
+app.listen(port, () => {
+  console.log(`🚀 Running on http://localhost:${port}`);
+});
