@@ -6,33 +6,55 @@ import { eq } from "drizzle-orm";
 const listRoute = new Elysia({prefix: '/list'})
 
 // CREATE
-listRoute.post('/create', async ({body}: {body: {name: string, account_id: number}}) => {
-    const {name, account_id} = body
+listRoute.post('/create', async ({ body }: { body: { name: string, account_id: number } }) => {
+    try {
+        const { name, account_id } = body;
 
-    const list = await db.insert(lists).values({ name, account_id })
+        const list = await db.insert(lists).values({ name, account_id });
 
-    return {success: true, message: "List created successfully", list};
-})
+        return {
+            success: true,
+            message: "List created successfully",
+            list
+        };
+    } catch (error) {
+        console.error("Error creating list:", error);
+        return {
+            success: false,
+            message: "Failed to create list.",
+            error: error instanceof Error ? error.message : String(error)
+        };
+    }
+});
 
 // READ
 listRoute.get('/get', async ({ query }) => {
-    const account_id = Number(query.account_id);
+    try {
+        const account_id = Number(query.account_id);
 
-    const list_data = isNaN(account_id)
-        ? await db.select().from(lists)
-        : await db.select().from(lists).where(eq(lists.account_id, account_id));
+        const list_data = isNaN(account_id)
+            ? await db.select().from(lists)
+            : await db.select().from(lists).where(eq(lists.account_id, account_id));
 
-    if (!list_data){
+        if (!list_data || list_data.length === 0) {
+            return {
+                success: false,
+                message: "No list found."
+            };
+        }
+
+        return {
+            success: true,
+            lists: list_data
+        };
+    } catch (error) {
+        console.error("Error fetching lists:", error);
         return {
             success: false,
-            message: "No list found."
-        }
+            message: "Failed to fetch lists.",
+            error: error instanceof Error ? error.message : String(error)
+        };
     }
-
-    return {
-        success: true,
-        lists: list_data
-    };
 });
 
 // UPDATE
