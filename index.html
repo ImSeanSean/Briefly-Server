@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="index.css">
+    <title>Finance Tracker</title>
+</head>
+
+<body>
+    <header>
+        <p>Finance Tracker</p>
+    </header>
+    <div class="container">
+        <!-- Data Overview -->
+        <div class="data-overview">
+            <h2>Data Overview</h2>
+            <div class="actions">
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                    <option value="Groceries">Groceries</option>
+                    <option value="Utilities">Utilities</option>
+                    <!-- Categories will be dynamically added here -->
+                </select>
+                <button>Export</button>
+                <button>Refresh</button>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Amount</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>2025-04-08</td>
+                        <td>Grocery Store</td>
+                        <td>Groceries</td>
+                        <td>-$89.47</td>
+                        <td>Completed</td>
+                        <td><button class="edit-btn">Edit</button></td>
+                    </tr>
+                    <!-- Additional rows can be dynamically added here -->
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Add Finance Popup -->
+        <div class="popup">
+            <h2>Add Item</h2>
+            <form id="addFinanceForm">
+                <div>
+                    <label for="date">Date</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div>
+                    <label for="description">Description</label>
+                    <input type="text" id="description" name="description" required>
+                </div>
+                <div>
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" required>
+                </div>
+                <div>
+                    <label for="amount">Amount</label>
+                    <input type="number" id="amount" name="amount" required>
+                </div>
+                <div>
+                    <label for="status">Status</label>
+                    <select id="status" name="status" required>
+                        <option value="Completed">Completed</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <button type="submit">Add</button>
+            </form>
+        </div>
+
+        <!-- Edit Popup -->
+        <div class="edit-popup" id="editPopup">
+            <button class="close-btn" id="closeEditPopup">x</button>
+            <h2>Edit</h2>
+            <form id="editFinanceForm" class="editFinance">
+                <div>
+                    <label for="editDate">Date</label>
+                    <input type="date" id="editDate" name="date" required>
+                </div>
+                <div>
+                    <label for="editDescription">Description</label>
+                    <input type="text" id="editDescription" name="description" required>
+                </div>
+                <div>
+                    <label for="editCategory">Category</label>
+                    <input type="text" id="editCategory" name="category" required>
+                </div>
+                <div>
+                    <label for="editAmount">Amount</label>
+                    <input type="number" id="editAmount" name="amount" required>
+                </div>
+                <div>
+                    <label for="editStatus">Status</label>
+                    <select id="editStatus" name="status" required>
+                        <option value="Completed">Completed</option>
+                        <option value="Pending">Pending</option>
+                    </select>
+                </div>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="ai-integration">
+        <h2>fAInance</h2>
+        <div class="chat-box">
+            <div id="chatMessages" class="messages">
+                <!-- Chat messages will appear here -->
+            </div>
+            <form id="chatForm">
+                <input type="text" id="userInput" placeholder="Ask something..." required>
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.querySelectorAll('.edit-btn').forEach(button => {
+            button.addEventListener('click', () => {
+                document.getElementById('editPopup').classList.add('active');
+            });
+        });
+
+        document.getElementById('editFinanceForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Finance updated!');
+            document.getElementById('editPopup').classList.remove('active');
+        });
+
+        document.getElementById('closeEditPopup').addEventListener('click', () => {
+        document.getElementById('editPopup').classList.remove('active');
+    });
+    </script>
+</body>
+
+</html>
