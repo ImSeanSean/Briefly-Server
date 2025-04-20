@@ -1,0 +1,19 @@
+{
+  "name": "briefly-server",
+  "module": "index.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/bun": "^1.2.10"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "better-sqlite3": "^11.9.1",
+    "drizzle-orm": "^0.42.0",
+    "elysia": "^1.2.25"
+  }
+}
