@@ -4,6 +4,7 @@ import cors from "@elysiajs/cors";
 import accountRoute from "./routes/account";
 import listRoute from "./routes/list";
 import { transactionRoute } from "./routes/transaction";
+import { geminiRoute } from "./routes/gemini";
 
 const port = Number(process.env.PORT) || 3000;
 
@@ -28,7 +29,9 @@ const app = new Elysia()
   .get("/", () => "Welcome to Briefly-Server!")
   .use(accountRoute)
   .use(listRoute)
+  .use(geminiRoute)
   .use(transactionRoute);
+
 
 // Start the server
 app.listen(port, () => {
