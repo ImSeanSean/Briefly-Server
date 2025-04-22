@@ -23,11 +23,17 @@ transactionRoute.post('/create', async ({ body }: { body: {
 });
 
 // READ
-transactionRoute.get('/list/:id', async ({ params }: { params: { id: string } }) => {
+transactionRoute.get("/list/:id", async ({ params }) => {
   try {
-    const result = await db.query.transactions.findMany({
-      where: (fields, { eq }) => eq(fields.list_id, Number(params.id))
-    });
+    const listId = Number(params.id);
+    if (isNaN(listId)) {
+      return { success: false, message: "Invalid list ID" };
+    }
+
+    const result = await db
+      .select()
+      .from(transactions)
+      .where(eq(transactions.list_id, listId));
 
     return { success: true, transactions: result };
   } catch (err) {

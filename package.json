@@ -5,15 +5,21 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/better-sqlite3": "^7.6.13",
-    "@types/bun": "^1.2.10"
+    "@types/bun": "^1.2.10",
+    "@types/cors": "^2.8.17"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "@elysiajs/cors": "^1.2.0",
     "bcrypt": "^5.1.1",
+    "cors": "^2.8.5",
     "drizzle-orm": "^0.42.0",
     "elysia": "^1.2.25",
     "sqlite3": "^5.1.7"
+  },
+  "scripts": {
+    "setup": "bun run /db/setup.ts"
   }
 }
